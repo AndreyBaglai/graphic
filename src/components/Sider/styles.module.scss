@@ -1,0 +1,34 @@
+.title {
+  background: #172060;
+  font-weight: 500;
+  font-size: 19.5px;
+  line-height: 29px;
+  color: #ffffff !important;
+  text-align: center;
+  margin: 0 !important;
+}
+
+.siderMenu {
+  padding: 50px 0;
+  background: #172060 !important;
+  list-style: none;
+  min-height: 100%;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+    font-size: 18.5px;
+    line-height: 28px;
+    color: #ffffff;
+    padding: 20px 50px;
+    align-items: end;
+    transition: all 0.5s ease;
+    cursor: pointer;
+
+    &:hover {
+      background: #ffffff;
+      color: #141D53;
+    }
+  }
+}

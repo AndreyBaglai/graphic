@@ -1,0 +1,35 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  background: #172060 !important;
+  padding: 60px 30px;
+  min-height: 140px;
+  align-items: center;
+}
+
+.menu {
+  background: #172060;
+  min-width: 400px;
+  padding-left: 0;
+  display: flex;
+  justify-content: space-around;
+  list-style: none;
+  margin: 0;
+
+  li {
+    padding: 0 35px;
+
+    a {
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 19.5px;
+      line-height: 29px;
+      transition: all 0.5s ease;
+      color: #bab9b9;
+
+      &:hover {
+        color: #ffffff;
+      }
+    }
+  }
+}
