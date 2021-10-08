@@ -5,6 +5,8 @@ import Header from 'components/Header';
 import Sider from 'components/Sider';
 import Content from 'components/Content';
 
+import { api } from 'config';
+
 import styles from './styles.module.scss';
 
 const App: React.FC = () => {
