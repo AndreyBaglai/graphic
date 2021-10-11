@@ -35,6 +35,18 @@
         background: #233093 !important;
       }
     }
+
+    .activeBtn {
+      color: #233093 !important;
+      background: #ffffff !important;
+      border: none;
+      box-shadow: 0px 4px 15px 5px rgba(0, 0, 0, 0.1);
+
+      &:hover {
+        background: #233093 !important;
+        color: #ffffff !important;
+      }
+    }
   }
 
   .period {
@@ -57,6 +69,11 @@
         background: #ffffff;
         color: #1c3ccd;
       }
+    }
+
+    li.active {
+      background: #ffffff;
+      color: #1c3ccd;
     }
   }
 }

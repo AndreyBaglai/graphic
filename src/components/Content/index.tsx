@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Typography } from 'antd';
 import ReactApexChart from 'react-apexcharts';
+import dayjs from 'dayjs';
 
 import { IPeriod } from 'types/Period';
 
 import { api } from 'config';
 
 import styles from './styles.module.scss';
-import dayjs from 'dayjs';
+import cn from 'classnames';
 
 interface IProps {
   category: string;
@@ -20,9 +21,10 @@ const defaultOptions: any = {
     type: 'candlestick',
   },
   title: {
-    text: 'CandleStick Chart - Category X-axis',
-    align: 'left'
-  },  annotations: {
+    text: '',
+    align: 'left',
+  },
+  annotations: {
     xaxis: [
       {
         x: 'Oct 06 14:00',
@@ -32,14 +34,14 @@ const defaultOptions: any = {
           style: {
             fontSize: '12px',
             color: '#fff',
-            background: '#00E396'
+            background: '#00E396',
           },
           orientation: 'horizontal',
           offsetY: 7,
-          text: 'Annotation Test'
-        }
-      }
-    ]
+          text: 'Annotation Test',
+        },
+      },
+    ],
   },
   tooltip: {
     enabled: true,
@@ -48,39 +50,53 @@ const defaultOptions: any = {
     type: 'category',
     labels: {
       formatter: (val: any) => {
-        return dayjs(val).format('MMM DD HH:mm')
-      }
-    }
+        return dayjs(val).format('MMM DD HH:mm');
+      },
+    },
   },
   yaxis: {
     tooltip: {
-      enabled: true
-    }
-  }
-}
+      enabled: true,
+    },
+  },
+};
 
 const Main: React.FC<IProps> = ({ category, periods }) => {
-  const [currentGranularity, setCurrentGranularity] = useState(periods[0].granularity);
+  const [idx, setIdx] = useState(0);
+  const [currentPeriod, setCurrentPeriod] = useState<IPeriod>(periods[idx]);
   const [candles, setCandles] = useState<any[]>([]);
+  const [graphicType, setGraphicType] = useState<'line' | 'candlestick'>('line');
+
+  const onSetGraphicTypeLine = () => {
+    graphicType === 'candlestick' && setGraphicType('line');
+  };
+
+  const onSetGraphicTypeCandle = () => {
+    graphicType === 'line' && setGraphicType('candlestick');
+  };
 
   useEffect(() => {
     api
-      .get(`${category}/candles?granularity=${currentGranularity}`)
+      .get(
+        `${category}/candles?granularity=${currentPeriod.granularity}&start=${currentPeriod.start}&end=${currentPeriod.end}`,
+      )
       .then((res: any) => res.data)
       .then((data: []) => {
+        // console.log(data);
         const prepareDate: any = data.map((item: any) => ({
           x: new Date(item[0]),
-          y: [item[3], item[2], item[1], item[4]]
+          y: [item[3], item[2], item[1], item[4]],
         }));
-        setCandles([{ name: 'candle', data: prepareDate}]);
-        // console.log(data))
-      })
-  }, [category, currentGranularity]);
+
+        setCandles([{ name: 'candle', data: prepareDate }]);
+      });
+  }, [category, currentPeriod]);
 
   const onChangePeriod = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement;
-    setCurrentGranularity(Number(target.dataset.granularity));
-  }
+    setCurrentPeriod(periods[Number(target.dataset.index)]);
+    setIdx(Number(target.dataset.index));
+  };
 
   return (
     <main className={styles.main}>
@@ -89,23 +105,37 @@ const Main: React.FC<IProps> = ({ category, periods }) => {
           {category}
         </Typography.Title>
         <div className={styles.buttonsWrapper}>
-          <Button type="primary" size="large">
+          <Button
+            className={cn({ [styles.activeBtn]: graphicType === 'candlestick' })}
+            onClick={onSetGraphicTypeCandle}
+            type="primary"
+            size="large">
             Coin
           </Button>
-          <Button type="primary" size="large">
+          <Button
+            className={cn({ [styles.activeBtn]: graphicType === 'line' })}
+            onClick={onSetGraphicTypeLine}
+            type="primary"
+            size="large">
             Line
           </Button>
         </div>
 
         <ul className={styles.period} onClick={onChangePeriod}>
-          {periods.map(({ granularity, name }: IPeriod) => (
-            <li key={name} data-granularity={granularity}>
+          {periods.map(({ name }: IPeriod, index) => (
+            <li key={name} data-index={index} className={cn({ [styles.active]: index === idx })}>
               {name}
             </li>
           ))}
         </ul>
       </div>
-      <ReactApexChart options={defaultOptions} series={candles} type="candlestick" height={350} />
+
+      {graphicType === 'line' && (
+        <ReactApexChart options={defaultOptions} series={candles} type="line" height={350} />
+      )}
+      {graphicType === 'candlestick' && (
+        <ReactApexChart options={defaultOptions} series={candles} type="candlestick" height={350} />
+      )}
     </main>
   );
 };

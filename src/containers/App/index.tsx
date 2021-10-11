@@ -17,13 +17,13 @@ const periods: IPeriod[] = [
     name: '3d',
     end: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
     start: dayjs().subtract(3, 'days').format('YYYY-MM-DDTHH:mm:ss'),
-    granularity: 3600,
+    granularity: 900,
   },
   {
     name: '7d',
     end: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
     start: dayjs().subtract(7, 'days').format('YYYY-MM-DDTHH:mm:ss'),
-    granularity: 21600,
+    granularity: 3600,
   },
   {
     name: '14d',
@@ -35,7 +35,7 @@ const periods: IPeriod[] = [
     name: '1m',
     end: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
     start: dayjs().subtract(1, 'months').format('YYYY-MM-DDTHH:mm:ss'),
-    granularity: 86400,
+    granularity: 21600,
   },
 ];
 
@@ -43,6 +43,7 @@ const App: React.FC = () => {
   const [categories, setCategories] = useState<string[]>([]);
   const [isSelectedCategory, setIsSelectedCategory] = useState(false);
   const [currentCategory, setCurrentCategory] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(-1);
 
   useEffect(() => {
     api
@@ -54,15 +55,17 @@ const App: React.FC = () => {
   const onSelectCategory = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement;
     const category = target.dataset.category;
+    const index = target.dataset.index;
     setIsSelectedCategory(true);
     category && setCurrentCategory(category);
+    index && setCurrentIndex(Number(index));
   };
 
   return (
     <Layout className={styles.wrapper}>
       <Header></Header>
       <Layout className={styles.content}>
-        <Sider categories={categories} onSelectCategory={onSelectCategory}></Sider>
+        <Sider categories={categories} onSelectCategory={onSelectCategory} currentIndex={currentIndex}></Sider>
         {isSelectedCategory && <Content category={currentCategory} periods={periods}></Content>}
       </Layout>
     </Layout>
