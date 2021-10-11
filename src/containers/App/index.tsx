@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Layout } from 'antd';
+import dayjs from 'dayjs';
 
 import Header from 'components/Header';
 import Sider from 'components/Sider';
@@ -12,10 +13,30 @@ import { api } from 'config';
 import styles from './styles.module.scss';
 
 const periods: IPeriod[] = [
-  { period: '259200', name: '3d' },
-  { period: '604800', name: '7d' },
-  { period: '1209600', name: '14d' },
-  { period: '2678400', name: '1m' },
+  {
+    name: '3d',
+    end: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
+    start: dayjs().subtract(3, 'days').format('YYYY-MM-DDTHH:mm:ss'),
+    granularity: 3600,
+  },
+  {
+    name: '7d',
+    end: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
+    start: dayjs().subtract(7, 'days').format('YYYY-MM-DDTHH:mm:ss'),
+    granularity: 21600,
+  },
+  {
+    name: '14d',
+    end: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
+    start: dayjs().subtract(14, 'days').format('YYYY-MM-DDTHH:mm:ss'),
+    granularity: 21600,
+  },
+  {
+    name: '1m',
+    end: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
+    start: dayjs().subtract(1, 'months').format('YYYY-MM-DDTHH:mm:ss'),
+    granularity: 86400,
+  },
 ];
 
 const App: React.FC = () => {
@@ -42,10 +63,7 @@ const App: React.FC = () => {
       <Header></Header>
       <Layout className={styles.content}>
         <Sider categories={categories} onSelectCategory={onSelectCategory}></Sider>
-        <Content
-          isSelected={isSelectedCategory}
-          category={currentCategory}
-          periods={periods}></Content>
+        {isSelectedCategory && <Content category={currentCategory} periods={periods}></Content>}
       </Layout>
     </Layout>
   );

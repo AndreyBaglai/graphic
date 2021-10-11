@@ -1,4 +1,6 @@
 export interface IPeriod {
-  period: string;
+  start: string;
+  end: string;
   name: string;
+  granularity: number;
 }
