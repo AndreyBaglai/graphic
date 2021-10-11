@@ -16,8 +16,16 @@
   list-style: none;
   margin: 0;
 
+  @media screen and (max-width: 700px) {
+    display: none;
+  }
+
   li {
     padding: 0 35px;
+
+    @media screen and (max-width: 900px) {
+      padding: 14px 16px;
+    }
 
     a {
       text-decoration: none;
