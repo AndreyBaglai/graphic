@@ -11,10 +11,10 @@ const _Header: React.FC = () => {
     <Header className={styles.header}>
       <Logo />
       <ul className={styles.menu}>
-        <li className={styles.active}><a href="#">Exchange</a></li>
-        <li><a href="#">Dashboard</a></li>
-        <li><a href="#">Balances</a></li>
-        <li><a href="#">Wallet</a></li>
+        <li className={styles.active}><a href="/#">Exchange</a></li>
+        <li><a href="/#">Dashboard</a></li>
+        <li><a href="/#">Balances</a></li>
+        <li><a href="/#">Wallet</a></li>
       </ul>
       <Button>Login</Button>
     </Header>

@@ -3,7 +3,9 @@ import { Button, Typography } from 'antd';
 import ReactApexChart from 'react-apexcharts';
 
 import { IPeriod } from 'types/Period';
+import { ICandle, ICandles } from 'types/Candle';
 
+import { MAX_CANDLES } from 'utils/const';
 import { ApexChartOptions, api, periods } from 'config';
 
 import styles from './styles.module.scss';
@@ -13,10 +15,10 @@ interface IProps {
   category: string;
 }
 
-const Content: React.FC<IProps> = ({ category} ) => {
+const Content: React.FC<IProps> = ({ category }) => {
   const [idx, setIdx] = useState(0);
   const [currentPeriod, setCurrentPeriod] = useState<IPeriod>(periods[idx]);
-  const [candles, setCandles] = useState<any[]>([]);
+  const [candles, setCandles] = useState<ICandles[]>([]);
   const [graphicType, setGraphicType] = useState<'line' | 'candlestick'>('candlestick');
 
   const onSetGraphicTypeLine = () => {
@@ -32,20 +34,28 @@ const Content: React.FC<IProps> = ({ category} ) => {
       .get(
         `${category}/candles?granularity=${currentPeriod.granularity}&start=${currentPeriod.start}&end=${currentPeriod.end}`,
       )
-      .then((res: any) => res.data)
-      .then((data: []) => {
-        let prepareData: any;
+      .then((res) => res.data)
+      .then((data: [number[]]) => {
+        let prepareData: ICandle[];
 
-        if (data.length > 75) {
-          prepareData = data.slice(0, 75).map((item: any) => ({
-            x: new Date(item[0]*1000),
-            y: [item[3], item[2], item[1], item[4]],
-          }));
+        if (data.length > MAX_CANDLES) {
+          prepareData = data.slice(0, MAX_CANDLES).map((item: number[]): ICandle => {
+            const [time, low_price, hight_price, open, close] = item;
+
+            return {
+              x: new Date(time * 1000),
+              y: [open, hight_price, low_price, close],
+            };
+          });
         } else {
-          prepareData = data.map((item: any) => ({
-            x: new Date(item[0]*1000),
-            y: [item[3], item[2], item[1], item[4]],
-          }));
+          prepareData = data.map((item: number[]) => {
+            const [time, low_price, hight_price, open, close] = item;
+
+            return {
+              x: new Date(time * 1000),
+              y: [open, hight_price, low_price, close],
+            };
+          });
         }
 
         setCandles([{ name: 'candle', data: prepareData }]);
@@ -94,7 +104,12 @@ const Content: React.FC<IProps> = ({ category} ) => {
         <ReactApexChart options={ApexChartOptions} series={candles} type="line" height={350} />
       )}
       {graphicType === 'candlestick' && (
-        <ReactApexChart options={ApexChartOptions} series={candles} type="candlestick" height={350} />
+        <ReactApexChart
+          options={ApexChartOptions}
+          series={candles}
+          type="candlestick"
+          height={350}
+        />
       )}
     </main>
   );

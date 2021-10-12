@@ -6,7 +6,7 @@ import Sider from 'components/Sider';
 import Content from 'components/Content';
 
 import { api } from 'config';
-import { ICoinBaseResponse } from 'types/Response';
+import { ICoinBaseResponse } from 'types/CoinBaseResponse';
 import { MAX_CATEGORIES } from 'utils/const';
 
 import styles from './styles.module.scss';

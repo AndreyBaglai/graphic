@@ -34,7 +34,7 @@ export const periods: IPeriod[] = [
   },
 ];
 
-export const ApexChartOptions: any = {
+export const ApexChartOptions: ApexCharts.ApexOptions | undefined = {
   chart: {
     height: 350,
     type: 'candlestick',
@@ -68,7 +68,7 @@ export const ApexChartOptions: any = {
   xaxis: {
     type: 'category',
     labels: {
-      formatter: (val: any) => dayjs(val).format('MMM DD HH:mm'),
+      formatter: (ms: string) => dayjs(ms).format('MMM DD HH:mm'),
     },
   },
   yaxis: {
