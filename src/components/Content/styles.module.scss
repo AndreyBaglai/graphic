@@ -5,7 +5,6 @@
   @media screen and (max-width: 830px) {
     padding: 24px 26px;
   }
-
 }
 
 .top {
@@ -27,33 +26,48 @@
     text-align: center;
     margin: 0 !important;
     text-transform: uppercase;
+    margin-right: 20px !important;
+
+    @media screen and (max-width: 768px) {
+      margin-right: 0 !important;
+      text-align: center;
+    }
+
+    @media screen and (max-width: 680px) {
+      margin-right: 10px !important;
+    }
   }
 
   .buttonsWrapper {
     display: flex;
-    flex: 1;
-    justify-content: space-around;
+    justify-content: center;
+    box-shadow: 0px 4px 15px 5px rgba(0, 0, 0, 0.1);
+
+    @media screen and (max-width: 700px) {
+      align-items: center;
+    }
 
     button {
+      background: linear-gradient(0deg, #edeef2, #edeef2);
       text-transform: uppercase;
       min-width: 100px;
-      background: #172060 !important;
-      border-color: #172060;
+      border: none;
+      color: #101843;
+      transition: all 0.5s ease;
 
       &:hover {
-        background: #233093 !important;
+        background: #ffffff;
+        color: #1c3ccd;
       }
     }
 
     .activeBtn {
-      color: #233093 !important;
-      background: #ffffff !important;
-      border: none;
-      box-shadow: 0px 4px 15px 5px rgba(0, 0, 0, 0.1);
+      background: #ffffff;
+      color: #1c3ccd;
 
       &:hover {
-        background: #233093 !important;
-        color: #ffffff !important;
+        background: #ffffff;
+        color: #1c3ccd;
       }
     }
   }

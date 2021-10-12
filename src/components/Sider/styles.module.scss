@@ -1,3 +1,13 @@
+.aside {
+  @media screen and (max-width: 700px) {
+    display: block;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    flex-basis: 0 !important;
+  }
+}
+
 .title {
   background: #172060;
   font-weight: 500;
@@ -14,6 +24,13 @@
   list-style: none;
   min-height: 100%;
 
+  @media screen and (max-width: 700px) {
+    display: flex;
+    margin-bottom: 0;
+    padding: 15px 0;
+    justify-content: center;
+  }
+
   li {
     display: flex;
     justify-content: space-between;
@@ -27,14 +44,21 @@
     cursor: pointer;
     text-transform: uppercase;
 
+    @media screen and (max-width: 700px) {
+      font-size: 11px;
+      padding: 10px 6px;
+      min-width: 70px;
+      justify-content: center;
+    }
+
     &:hover {
       background: #ffffff;
-      color: #141D53;
+      color: #141d53;
     }
   }
 
   .active {
     background: #ffffff;
-    color: #141D53;
+    color: #141d53;
   }
 }

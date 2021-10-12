@@ -49,9 +49,7 @@ const defaultOptions: any = {
   xaxis: {
     type: 'category',
     labels: {
-      formatter: (val: any) => {
-        return dayjs(val).format('MMM DD HH:mm');
-      },
+      formatter: (val: any) => dayjs(val).format('MMM DD HH:mm'),
     },
   },
   yaxis: {
@@ -65,7 +63,7 @@ const Main: React.FC<IProps> = ({ category, periods }) => {
   const [idx, setIdx] = useState(0);
   const [currentPeriod, setCurrentPeriod] = useState<IPeriod>(periods[idx]);
   const [candles, setCandles] = useState<any[]>([]);
-  const [graphicType, setGraphicType] = useState<'line' | 'candlestick'>('line');
+  const [graphicType, setGraphicType] = useState<'line' | 'candlestick'>('candlestick');
 
   const onSetGraphicTypeLine = () => {
     graphicType === 'candlestick' && setGraphicType('line');
@@ -82,13 +80,21 @@ const Main: React.FC<IProps> = ({ category, periods }) => {
       )
       .then((res: any) => res.data)
       .then((data: []) => {
-        // console.log(data);
-        const prepareDate: any = data.map((item: any) => ({
-          x: new Date(item[0]),
-          y: [item[3], item[2], item[1], item[4]],
-        }));
+        let prepareData: any;
 
-        setCandles([{ name: 'candle', data: prepareDate }]);
+        if (data.length > 75) {
+          prepareData = data.slice(0, 75).map((item: any) => ({
+            x: new Date(item[0]*1000),
+            y: [item[3], item[2], item[1], item[4]],
+          }));
+        } else {
+          prepareData = data.map((item: any) => ({
+            x: new Date(item[0]*1000),
+            y: [item[3], item[2], item[1], item[4]],
+          }));
+        }
+
+        setCandles([{ name: 'candle', data: prepareData }]);
       });
   }, [category, currentPeriod]);
 

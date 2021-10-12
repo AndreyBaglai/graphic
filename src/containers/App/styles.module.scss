@@ -4,4 +4,17 @@
 
 .content {
   flex-direction: row !important;
+
+  @media screen and (max-width: 700px) {
+    flex-direction: column !important;
+  }
+}
+
+.title {
+  margin: 50px auto;
+  color: #172060 !important;
+
+  @media screen and (max-width: 770px) {
+    font-size: 20px !important;
+  }
 }

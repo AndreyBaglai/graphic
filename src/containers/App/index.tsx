@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Layout } from 'antd';
+import { Layout, Typography } from 'antd';
 import dayjs from 'dayjs';
 
 import Header from 'components/Header';
@@ -16,25 +16,25 @@ const periods: IPeriod[] = [
   {
     name: '3d',
     end: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
-    start: dayjs().subtract(3, 'days').format('YYYY-MM-DDTHH:mm:ss'),
+    start: dayjs().subtract(3, 'day').format('YYYY-MM-DDTHH:mm:ss'),
     granularity: 900,
   },
   {
     name: '7d',
     end: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
-    start: dayjs().subtract(7, 'days').format('YYYY-MM-DDTHH:mm:ss'),
+    start: dayjs().subtract(1, 'week').format('YYYY-MM-DDTHH:mm:ss'),
     granularity: 3600,
   },
   {
     name: '14d',
     end: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
-    start: dayjs().subtract(14, 'days').format('YYYY-MM-DDTHH:mm:ss'),
+    start: dayjs().subtract(2, 'week').format('YYYY-MM-DDTHH:mm:ss'),
     granularity: 21600,
   },
   {
     name: '1m',
     end: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
-    start: dayjs().subtract(1, 'months').format('YYYY-MM-DDTHH:mm:ss'),
+    start: dayjs().subtract(1, 'month').format('YYYY-MM-DDTHH:mm:ss'),
     granularity: 21600,
   },
 ];
@@ -56,6 +56,7 @@ const App: React.FC = () => {
     const target = event.target as HTMLElement;
     const category = target.dataset.category;
     const index = target.dataset.index;
+
     setIsSelectedCategory(true);
     category && setCurrentCategory(category);
     index && setCurrentIndex(Number(index));
@@ -65,8 +66,17 @@ const App: React.FC = () => {
     <Layout className={styles.wrapper}>
       <Header></Header>
       <Layout className={styles.content}>
-        <Sider categories={categories} onSelectCategory={onSelectCategory} currentIndex={currentIndex}></Sider>
-        {isSelectedCategory && <Content category={currentCategory} periods={periods}></Content>}
+        <Sider
+          categories={categories}
+          onSelectCategory={onSelectCategory}
+          currentIndex={currentIndex}></Sider>
+        {isSelectedCategory ? (
+          <Content category={currentCategory} periods={periods}></Content>
+        ) : (
+          <Typography.Title level={2} className={styles.title}>
+            Please, select any category
+          </Typography.Title>
+        )}
       </Layout>
     </Layout>
   );
