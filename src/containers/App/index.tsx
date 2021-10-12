@@ -1,43 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Layout, Typography } from 'antd';
-import dayjs from 'dayjs';
 
 import Header from 'components/Header';
 import Sider from 'components/Sider';
 import Content from 'components/Content';
 
-import { IPeriod } from 'types/Period';
-
 import { api } from 'config';
+import { ICoinBaseResponse } from 'types/Response';
+import { MAX_CATEGORIES } from 'utils/const';
 
 import styles from './styles.module.scss';
-
-const periods: IPeriod[] = [
-  {
-    name: '3d',
-    end: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
-    start: dayjs().subtract(3, 'day').format('YYYY-MM-DDTHH:mm:ss'),
-    granularity: 900,
-  },
-  {
-    name: '7d',
-    end: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
-    start: dayjs().subtract(1, 'week').format('YYYY-MM-DDTHH:mm:ss'),
-    granularity: 3600,
-  },
-  {
-    name: '14d',
-    end: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
-    start: dayjs().subtract(2, 'week').format('YYYY-MM-DDTHH:mm:ss'),
-    granularity: 21600,
-  },
-  {
-    name: '1m',
-    end: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
-    start: dayjs().subtract(1, 'month').format('YYYY-MM-DDTHH:mm:ss'),
-    granularity: 21600,
-  },
-];
 
 const App: React.FC = () => {
   const [categories, setCategories] = useState<string[]>([]);
@@ -48,8 +20,12 @@ const App: React.FC = () => {
   useEffect(() => {
     api
       .get('')
-      .then((res: any) => res.data)
-      .then((data: []) => setCategories(data.slice(0, 5).map((item: any) => item.id)));
+      .then((res) => res.data)
+      .then((data: ICoinBaseResponse[]) =>
+        setCategories(
+          data.slice(0, MAX_CATEGORIES).map((category: ICoinBaseResponse) => category.id),
+        ),
+      );
   }, []);
 
   const onSelectCategory = (event: React.MouseEvent) => {
@@ -64,14 +40,16 @@ const App: React.FC = () => {
 
   return (
     <Layout className={styles.wrapper}>
-      <Header></Header>
+      <Header />
       <Layout className={styles.content}>
         <Sider
           categories={categories}
           onSelectCategory={onSelectCategory}
-          currentIndex={currentIndex}></Sider>
+          currentIndex={currentIndex}
+        />
+
         {isSelectedCategory ? (
-          <Content category={currentCategory} periods={periods}></Content>
+          <Content category={currentCategory}></Content>
         ) : (
           <Typography.Title level={2} className={styles.title}>
             Please, select any category

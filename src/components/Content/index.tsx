@@ -1,65 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Typography } from 'antd';
 import ReactApexChart from 'react-apexcharts';
-import dayjs from 'dayjs';
 
 import { IPeriod } from 'types/Period';
 
-import { api } from 'config';
+import { ApexChartOptions, api, periods } from 'config';
 
 import styles from './styles.module.scss';
 import cn from 'classnames';
 
 interface IProps {
   category: string;
-  periods: IPeriod[];
 }
 
-const defaultOptions: any = {
-  chart: {
-    height: 350,
-    type: 'candlestick',
-  },
-  title: {
-    text: '',
-    align: 'left',
-  },
-  annotations: {
-    xaxis: [
-      {
-        x: 'Oct 06 14:00',
-        borderColor: '#00E396',
-        label: {
-          borderColor: '#00E396',
-          style: {
-            fontSize: '12px',
-            color: '#fff',
-            background: '#00E396',
-          },
-          orientation: 'horizontal',
-          offsetY: 7,
-          text: 'Annotation Test',
-        },
-      },
-    ],
-  },
-  tooltip: {
-    enabled: true,
-  },
-  xaxis: {
-    type: 'category',
-    labels: {
-      formatter: (val: any) => dayjs(val).format('MMM DD HH:mm'),
-    },
-  },
-  yaxis: {
-    tooltip: {
-      enabled: true,
-    },
-  },
-};
-
-const Main: React.FC<IProps> = ({ category, periods }) => {
+const Content: React.FC<IProps> = ({ category} ) => {
   const [idx, setIdx] = useState(0);
   const [currentPeriod, setCurrentPeriod] = useState<IPeriod>(periods[idx]);
   const [candles, setCandles] = useState<any[]>([]);
@@ -137,13 +91,13 @@ const Main: React.FC<IProps> = ({ category, periods }) => {
       </div>
 
       {graphicType === 'line' && (
-        <ReactApexChart options={defaultOptions} series={candles} type="line" height={350} />
+        <ReactApexChart options={ApexChartOptions} series={candles} type="line" height={350} />
       )}
       {graphicType === 'candlestick' && (
-        <ReactApexChart options={defaultOptions} series={candles} type="candlestick" height={350} />
+        <ReactApexChart options={ApexChartOptions} series={candles} type="candlestick" height={350} />
       )}
     </main>
   );
 };
 
-export default Main;
+export default Content;

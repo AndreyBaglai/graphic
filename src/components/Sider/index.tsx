@@ -17,6 +17,7 @@ const _Sider: React.FC<IProps> = ({ categories, onSelectCategory, currentIndex }
       <Typography.Title level={2} className={styles.title}>
         Popular pair
       </Typography.Title>
+      
       <ul className={styles.siderMenu} onClick={onSelectCategory}>
         {categories.map((name: string, idx: number) => (
           <li key={name} data-category={name} data-index={idx} className={cn({[styles.active]: idx === currentIndex})}>
