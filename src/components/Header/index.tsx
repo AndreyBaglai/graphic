@@ -18,10 +18,9 @@ const _Header: React.FC = () => {
     };
 
     const _onError = () => {
-      console.log('error');
+      console.log('init error');
     };
 
-    console.log(window.gapi);
     try {
       window.gapi.load('auth2', () => {
         window.gapi.auth2
@@ -53,13 +52,14 @@ const _Header: React.FC = () => {
 
       const id_token = googleUser.getAuthResponse().id_token;
       // console.log('ID Token: ' + id_token);
+      console.log('User signed in');
     });
   };
 
   const OnSignOut = () => {
     const auth2 = window.gapi.auth2.getAuthInstance();
     auth2.signOut().then(() => {
-      console.log('User signed out.');
+      console.log('User signed out');
     });
 
     setIsLogIn(false);
