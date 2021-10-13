@@ -12,13 +12,13 @@ export const periods: IPeriod[] = [
     name: '3d',
     end: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
     start: dayjs().subtract(3, 'day').format('YYYY-MM-DDTHH:mm:ss'),
-    granularity: 900,
+    granularity: 3600,
   },
   {
     name: '7d',
     end: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
     start: dayjs().subtract(1, 'week').format('YYYY-MM-DDTHH:mm:ss'),
-    granularity: 3600,
+    granularity: 21600,
   },
   {
     name: '14d',
@@ -30,7 +30,7 @@ export const periods: IPeriod[] = [
     name: '1m',
     end: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
     start: dayjs().subtract(1, 'month').format('YYYY-MM-DDTHH:mm:ss'),
-    granularity: 21600,
+    granularity: 86400,
   },
 ];
 
