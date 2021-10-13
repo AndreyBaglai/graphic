@@ -7,12 +7,12 @@ import Content from 'components/Content';
 
 import { api } from 'config';
 import { ICoinBaseResponse } from 'types/CoinBaseResponse';
-import { MAX_CATEGORIES } from 'utils/const';
+import { MAX_PAIRS } from 'utils/const';
 
 import styles from './styles.module.scss';
 
 const App: React.FC = () => {
-  const [categories, setCategories] = useState<string[]>([]);
+  const [pairs, setPairs] = useState<string[]>([]);
   const [isSelectedCategory, setIsSelectedCategory] = useState(false);
   const [currentCategory, setCurrentCategory] = useState('');
   const [currentIndex, setCurrentIndex] = useState(-1);
@@ -22,15 +22,15 @@ const App: React.FC = () => {
       .get('')
       .then((res) => res.data)
       .then((data: ICoinBaseResponse[]) =>
-        setCategories(
-          data.slice(0, MAX_CATEGORIES).map((category: ICoinBaseResponse) => category.id),
+        setPairs(
+          data.slice(0, MAX_PAIRS).map((category: ICoinBaseResponse) => category.id),
         ),
       );
   }, []);
 
   const onSelectCategory = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement;
-    const category = target.dataset.category;
+    const category = target.dataset.pair;
     const index = target.dataset.index;
 
     setIsSelectedCategory(true);
@@ -43,16 +43,16 @@ const App: React.FC = () => {
       <Header />
       <Layout className={styles.content}>
         <Sider
-          categories={categories}
+          pairs={pairs}
           onSelectCategory={onSelectCategory}
           currentIndex={currentIndex}
         />
 
         {isSelectedCategory ? (
-          <Content category={currentCategory}></Content>
+          <Content category={currentCategory} />
         ) : (
           <Typography.Title level={2} className={styles.title}>
-            Please, select any category
+            Please, select any pair
           </Typography.Title>
         )}
       </Layout>
