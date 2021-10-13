@@ -21,14 +21,18 @@ const _Header: React.FC = () => {
       console.log('error');
     };
 
-    // console.log(window.gapi);
-    window.gapi.load('auth2', () => {
-      window.gapi.auth2
-        .init({
-          client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-        })
-        .then(_onInit, _onError);
-    });
+    console.log(window.gapi);
+    try {
+      window.gapi.load('auth2', () => {
+        window.gapi.auth2
+          .init({
+            client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+          })
+          .then(_onInit, _onError);
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }, []);
 
   const OnSignIn = () => {
@@ -36,19 +40,19 @@ const _Header: React.FC = () => {
 
     auth2.signIn().then((googleUser) => {
       const profile = googleUser.getBasicProfile();
-      console.log('ID: ' + profile.getId());
-      console.log('Full Name: ' + profile.getName());
-      console.log('Given Name: ' + profile.getGivenName());
-      console.log('Family Name: ' + profile.getFamilyName());
-      console.log('Image URL: ' + profile.getImageUrl());
-      console.log('Email: ' + profile.getEmail());
+      // console.log('ID: ' + profile.getId());
+      // console.log('Full Name: ' + profile.getName());
+      // console.log('Given Name: ' + profile.getGivenName());
+      // console.log('Family Name: ' + profile.getFamilyName());
+      // console.log('Image URL: ' + profile.getImageUrl());
+      // console.log('Email: ' + profile.getEmail());
 
       setUserName(profile.getName());
       setUserImgUrl(profile.getImageUrl());
       setIsLogIn(true);
 
       const id_token = googleUser.getAuthResponse().id_token;
-      console.log('ID Token: ' + id_token);
+      // console.log('ID Token: ' + id_token);
     });
   };
 
