@@ -15,7 +15,7 @@
     flex-direction: column;
     color: #ffffff;
     justify-content: center;
-    align-items: end;
+    align-items: flex-end;
     max-height: 100%;
 
     @media screen and (max-width: 700px) {
@@ -65,4 +65,9 @@
       color: #ffffff;
     }
   }
+}
+
+.authBtn {
+  background-color: rgb(255, 247, 1) !important;
+  border: none !important;
 }

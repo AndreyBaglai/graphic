@@ -8,6 +8,7 @@ import Content from 'components/Content';
 import { api } from 'config';
 import { ICoinBaseResponse } from 'types/CoinBaseResponse';
 import { MAX_PAIRS } from 'utils/const';
+import { IUser } from 'types/User';
 
 import styles from './styles.module.scss';
 
@@ -16,6 +17,7 @@ const App: React.FC = () => {
   const [isSelectedCategory, setIsSelectedCategory] = useState(false);
   const [currentCategory, setCurrentCategory] = useState('');
   const [currentIndex, setCurrentIndex] = useState(-1);
+  const [currentUser, setCurrentUser] = useState<IUser | null>(null);
 
   useEffect(() => {
     api
@@ -27,6 +29,13 @@ const App: React.FC = () => {
         ),
       );
   }, []);
+
+  useEffect(() => {
+    if (localStorage.getItem('user') !== null) {
+      const user = localStorage.getItem('user');
+      user && setCurrentUser(JSON.parse(user));
+    }
+  }, [])
 
   const onSelectCategory = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement;
@@ -40,7 +49,7 @@ const App: React.FC = () => {
 
   return (
     <Layout className={styles.wrapper}>
-      <Header />
+      <Header user={currentUser} />
       <Layout className={styles.content}>
         <Sider
           pairs={pairs}

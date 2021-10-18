@@ -5,63 +5,61 @@ import { Header } from 'antd/lib/layout/layout';
 import User from 'components/User';
 import Logo from './Logo';
 
+import { IUser } from 'types/User';
+
 import styles from './styles.module.scss';
 
-const _Header: React.FC = () => {
+interface IProps {
+  user: IUser | null;
+}
+
+const _Header: React.FC<IProps> = ({ user }) => {
   const [isLogIn, setIsLogIn] = useState(false);
-  const [userName, setUserName] = useState('');
+  const [UserFullName, setUserFullName] = useState('');
   const [userImgUrl, setUserImgUrl] = useState('');
 
   useEffect(() => {
-    const _onInit = () => {
-      console.log('init OK');
-    };
-
-    const _onError = () => {
-      console.log('init error');
-    };
-
     try {
       window.gapi.load('auth2', () => {
-        window.gapi.auth2
-          .init({
-            client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-          })
-          .then(_onInit, _onError);
+        window.gapi.auth2.init({
+          client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+        });
       });
     } catch (err) {
       console.log(err);
     }
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      setIsLogIn(true);
+      setUserFullName(user.fullName);
+      setUserImgUrl(user.imgUrl);
+    }
+  }, [user]);
+
   const OnSignIn = () => {
-    const auth2 = window.gapi.auth2.getAuthInstance();
-
-    auth2.signIn().then((googleUser) => {
+    window.gapi.auth2.getAuthInstance().signIn().then((googleUser) => {
       const profile = googleUser.getBasicProfile();
-      // console.log('ID: ' + profile.getId());
-      // console.log('Full Name: ' + profile.getName());
-      // console.log('Given Name: ' + profile.getGivenName());
-      // console.log('Family Name: ' + profile.getFamilyName());
-      // console.log('Image URL: ' + profile.getImageUrl());
-      // console.log('Email: ' + profile.getEmail());
+      const id_token = googleUser.getAuthResponse().id_token;
 
-      setUserName(profile.getName());
+      const user: IUser = {
+        token: id_token,
+        fullName: profile.getName(),
+        imgUrl: profile.getImageUrl(),
+      };
+
+      localStorage.setItem('user', JSON.stringify(user));
+
+      setUserFullName(profile.getName());
       setUserImgUrl(profile.getImageUrl());
       setIsLogIn(true);
-
-      const id_token = googleUser.getAuthResponse().id_token;
-      // console.log('ID Token: ' + id_token);
-      console.log('User signed in');
     });
   };
 
   const OnSignOut = () => {
-    const auth2 = window.gapi.auth2.getAuthInstance();
-    auth2.signOut().then(() => {
-      console.log('User signed out');
-    });
-
+    window.gapi.auth2.getAuthInstance().signOut();
+    localStorage.removeItem('user');
     setIsLogIn(false);
   };
 
@@ -83,11 +81,16 @@ const _Header: React.FC = () => {
         </li>
       </ul>
 
-      {!isLogIn && <Button onClick={OnSignIn}>Log In</Button>}
-      {isLogIn && (
+      {!isLogIn ? (
+        <Button className={styles.authBtn} onClick={OnSignIn}>
+          Log In
+        </Button>
+      ) : (
         <div className={styles.userWrapper}>
-          <User name={userName} imgUrl={userImgUrl} />
-          <Button onClick={OnSignOut}>Log Out</Button>
+          <User name={UserFullName} imgUrl={userImgUrl} />
+          <Button className={styles.authBtn} onClick={OnSignOut}>
+            Log Out
+          </Button>
         </div>
       )}
     </Header>
