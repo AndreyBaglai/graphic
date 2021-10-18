@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Typography } from 'antd';
-import ReactApexChart from 'react-apexcharts';
+
+import Chart from './Chart';
 
 import { IPeriod } from 'types/Period';
 import { ICandle, ICandles } from 'types/Candle';
 
 import { MAX_CANDLES } from 'utils/const';
-import { ApexChartOptions, api, periods } from 'config';
+import { api, periods } from 'config';
 
 import styles from './styles.module.scss';
 import cn from 'classnames';
@@ -15,7 +16,7 @@ interface IProps {
   category: string;
 }
 
-const Content: React.FC<IProps> = ({ category }) => {
+const Main: React.FC<IProps> = ({ category }) => {
   const [idx, setIdx] = useState(0);
   const [currentPeriod, setCurrentPeriod] = useState<IPeriod>(periods[idx]);
   const [candles, setCandles] = useState<ICandles[]>([]);
@@ -74,6 +75,7 @@ const Content: React.FC<IProps> = ({ category }) => {
         <Typography.Title level={2} className={styles.title}>
           {category}
         </Typography.Title>
+
         <div className={styles.buttonsWrapper}>
           <Button
             className={cn({ [styles.activeBtn]: graphicType === 'candlestick' })}
@@ -100,19 +102,9 @@ const Content: React.FC<IProps> = ({ category }) => {
         </ul>
       </div>
 
-      {graphicType === 'line' && (
-        <ReactApexChart options={ApexChartOptions} series={candles} type="line" height={350} />
-      )}
-      {graphicType === 'candlestick' && (
-        <ReactApexChart
-          options={ApexChartOptions}
-          series={candles}
-          type="candlestick"
-          height={350}
-        />
-      )}
+      <Chart type={graphicType} candles={candles} />
     </main>
   );
 };
 
-export default Content;
+export default Main;

@@ -3,7 +3,7 @@ import { Layout, Typography } from 'antd';
 
 import Header from 'components/Header';
 import Sider from 'components/Sider';
-import Content from 'components/Content';
+import Main from 'components/Main';
 
 import { api } from 'config';
 import { ICoinBaseResponse } from 'types/CoinBaseResponse';
@@ -58,7 +58,7 @@ const App: React.FC = () => {
         />
 
         {isSelectedCategory ? (
-          <Content category={currentCategory} />
+          <Main category={currentCategory} />
         ) : (
           <Typography.Title level={2} className={styles.title}>
             Please, select any pair
