@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Layout, Typography } from 'antd';
 
 import Header from 'components/Header';
@@ -37,7 +37,7 @@ const App: React.FC = () => {
     }
   }, [])
 
-  const onSelectCategory = (event: React.MouseEvent) => {
+  const onSelectCategory = useCallback((event: React.MouseEvent) => {
     const target = event.target as HTMLElement;
     const category = target.dataset.pair;
     const index = target.dataset.index;
@@ -45,7 +45,7 @@ const App: React.FC = () => {
     setIsSelectedCategory(true);
     category && setCurrentCategory(category);
     index && setCurrentIndex(Number(index));
-  };
+  }, [currentCategory]);
 
   return (
     <Layout className={styles.wrapper}>
